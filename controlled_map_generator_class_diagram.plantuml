@@ -253,7 +253,7 @@ package DomainLayer {
         + void setUser(User user)
     }
 
-    Company 1 --> 1 Address : has-a
+    Company "0..1" *--> "1..*" Address : has-a
     User --> Address : has-a
     Supplier --> Address : has-a
 
