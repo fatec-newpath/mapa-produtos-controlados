@@ -1,0 +1,308 @@
+@startuml controlled_map_generator_class_diagram
+
+package DomainLayer {
+
+    class Address {
+        + UUID id
+        + String publicPlace
+        + String number
+        + String neighborhood
+        + String city
+        + String state
+        + String cep
+        + String complement
+
+        + UUID getId()
+        + void setId(UUID id)
+        + String getPublicPlace()
+        + void setPublicPlace(String publicPlace)
+        + String getNumber()
+        + void setNumber(String number)
+        + String getNeighborhood()
+        + void setNeighborhood(String neighborhood)
+        + String getCity()
+        + void setCity(String city)
+        + String getState()
+        + void setState(String state)
+        + String getCep()
+        + void setCep(String cep)
+        + String getComplement()
+        + void setComplement(String complement)
+    }
+
+    class Company {
+        + UUID id
+        + String corporateReason
+        + String cnpj
+        + String phone
+        + Address address
+
+        + UUID getId()
+        + void setId(UUID id)
+        + String getCorporateReason()
+        + void setCorporateReason(String corporateReason)
+        + String getCnpj()
+        + void setCnpj(String cnpj)
+        + String getPhone()
+        + void setPhone(String phone)
+        + Address getAddress()
+        + void setAddress(Address address)
+    }
+
+    class User {
+        + UUID id
+        + String name
+        + String cpf
+        + String rg
+        + String phone
+        + String email
+        + String password
+        + boolean isActive
+        + Address address
+        + Company company
+
+        + UUID getId()
+        + void setId(UUID id)
+        + String getName()
+        + void setName(String name)
+        + String getCpf()
+        + void setCpf(String cpf)
+        + String getRg()
+        + void setRg(String rg)
+        + String getPhone()
+        + void setPhone(String phone)
+        + String getEmail()
+        + void setEmail(String email)
+        + String getPassword()
+        + void setPassword(String password)
+        + boolean getIsActive()
+        + void setIsActive(boolean isActive)
+        + Address getAddress()
+        + void setAddress(Address address)
+        + Company getCompany()
+        + void setCompany(Company company)
+    }
+
+    class Supplier {
+        + UUID id
+        + String corporateReason
+        + String cnpj
+        + String phone
+        + Address address
+        + Company company
+
+        + UUID getId()
+        + void setId(UUID id)
+        + String getCorporateReason()
+        + void setCorporateReason(String corporateReason)
+        + String getCnpj()
+        + void setCnpj(String cnpj)
+        + String getPhone()
+        + void setPhone(String phone)
+        + Address getAddress()
+        + void setAddress(Address address)
+        + Company getCompany()
+        + void setCompany(Company company)
+    }
+
+    class Product {
+        + UUID id
+        + String name
+        + String measurementUnit
+        + Company company
+
+        + UUID getId()
+        + void setId(UUID id)
+        + String getName()
+        + void setName(String name)
+        + String getMeasurementUnit()
+        + void setMeasurementUnit(String measurementUnit)
+        + Company getCompany()
+        + void setCompany(Company company)
+    }
+
+    class Invoice {
+        + UUID id
+        + String invoiceNumber
+        + String path
+        + Supplier supplier
+        + User registrationUser
+        + Company company
+
+        + UUID getId()
+        + void setId(UUID id)
+        + String getInvoiceNumber()
+        + void setInvoiceNumber(String invoiceNumber)
+        + String getPath()
+        + void setPath(String path)
+        + Supplier getSupplier()
+        + void setSupplier(Supplier supplier)
+        + User getRegistrationUser()
+        + void setRegistrationUser(User registrationUser)
+        + Company getCompany()
+        + void setCompany(Company company)
+    }
+
+    class ProductMovimentationIn {
+        + UUID id
+        + BigDecimal quantity
+        + LocalDate purchaseDate
+        + Invoice invoice
+        + Product product
+        + Supplier supplier
+        + User registrationUser
+        + Company company
+
+        + UUID getId()
+        + void setId(UUID id)
+        + BigDecimal getQuantity()
+        + void setQuantity(BigDecimal quantity)
+        + LocalDate getPurchaseDate()
+        + void setPurchaseDate(LocalDate purchaseDate)
+        + Invoice getInvoice()
+        + void setInvoice(Invoice invoice)
+        + Product getProduct()
+        + void setProduct(Product product)
+        + Supplier getSupplier()
+        + void setSupplier(Supplier supplier)
+        + User getRegistrationUser()
+        + void setRegistrationUser(User registrationUser)
+        + Company getCompany()
+        + void setCompany(Company company)
+    }
+
+    class ProductMovimentationOut {
+        + UUID id
+        + BigDecimal quantity
+        + String destination
+        + LocalDateTime consumptionDate
+        + Product product
+        + User registrationUser
+        + Company company
+
+        + UUID getId()
+        + void setId(UUID id)
+        + BigDecimal getQuantity()
+        + void setQuantity(BigDecimal quantity)
+        + String getDestination()
+        + void setDestination(String destination)
+        + LocalDateTime getConsumptionDate()
+        + void setConsumptionDate(LocalDateTime consumptionDate)
+        + Product getProduct()
+        + void setProduct(Product product)
+        + User getRegistrationUser()
+        + void setRegistrationUser(User registrationUser)
+        + Company getCompany()
+        + void setCompany(Company company)
+    }
+
+    class ProductMapHistory {
+        + UUID id
+        + LocalDate generatedDate
+        + boolean isOriginal
+        + Company company
+
+        + UUID getId()
+        + void setId(UUID id)
+        + LocalDate getGeneratedDate()
+        + void setGeneratedDate(LocalDate generatedDate)
+        + boolean getIsOriginal()
+        + void setIsOriginal(boolean isOriginal)
+        + Company getCompany()
+        + void setCompany(Company company)
+    }
+
+    class ProductMapHistoryProduct {
+        + UUID id
+        + BigDecimal remainingQuantity
+        + BigDecimal purchasedQuantity
+        + BigDecimal totalConsumed
+        + BigDecimal totalLost
+        + BigDecimal finalQuantity
+        + ProductMapHistory productMapHistory
+        + Product product
+
+        + UUID getId()
+        + void setId(UUID id)
+        + BigDecimal getRemainingQuantity()
+        + void setRemainingQuantity(BigDecimal remainingQuantity)
+        + BigDecimal getPurchasedQuantity()
+        + void setPurchasedQuantity(BigDecimal purchasedQuantity)
+        + BigDecimal getTotalConsumed()
+        + void setTotalConsumed(BigDecimal totalConsumed)
+        + BigDecimal getTotalLost()
+        + void setTotalLost(BigDecimal totalLost)
+        + BigDecimal getFinalQuantity()
+        + void setFinalQuantity(BigDecimal finalQuantity)
+        + ProductMapHistory getProductMapHistory()
+        + void setProductMapHistory(ProductMapHistory productMapHistory)
+        + Product getProduct()
+        + void setProduct(Product product)
+    }
+
+    class AccessLog {
+        + UUID id
+        + LocalDateTime logDate
+        + User user
+
+        + UUID getId()
+        + void setId(UUID id)
+        + LocalDateTime getLogDate()
+        + void setLogDate(LocalDateTime logDate)
+        + User getUser()
+        + void setUser(User user)
+    }
+
+    Company 1 --> 1 Address : has-a
+    User --> Address : has-a
+    Supplier --> Address : has-a
+
+    User --> Company : works-for
+    Supplier --> Company : works-with
+    Product --> Company : belongs-to
+    Invoice --> Company : issued-by
+    ProductMovimentationIn --> Company : registered-by
+    ProductMovimentationOut --> Company : registered-by
+    ProductMapHistory --> Company : related-to
+    AccessLog --> User : created-by
+
+    Invoice --> Supplier : issued-by
+    Invoice --> User : registered-by
+    ProductMovimentationIn --> Invoice : refers-to
+    ProductMovimentationIn --> Product : contains
+    ProductMovimentationIn --> Supplier : from
+    ProductMovimentationIn --> User : registered-by
+    ProductMovimentationOut --> Product : contains
+    ProductMovimentationOut --> User : registered-by
+    ProductMapHistoryProduct --> ProductMapHistory : part-of
+    ProductMapHistoryProduct --> Product : refers-to
+}
+
+package ApplicationLayer {
+  class CompanyService {
+    + CompanyRepository companyRepository    
+    
+    + void CompanyService(CompanyRepository companyRepository)
+    + void registerCompany(Company company)
+  }
+
+  class UserService {
+    + UserRepository userRepository
+    
+    + void UserService()
+    + void registerUser(User user)
+  }
+}
+
+package AdapterLayer {
+  interface CompanyRepository {
+    + void save(Company company)
+    + Company findById(UUID id)
+  }
+
+  interface UserRepository {
+    + void save(User user)
+    + User findById(UUID id)
+}
+
+@enduml
