@@ -1,9 +1,8 @@
 @startuml controlled_map_generator_class_diagram
 skinparam linetype ortho
 
-package SG-MPC {
-
-    class Address {
+package Sistema-Gerenciador-Mapa-Produtos-Controlados {
+    class Address <<entity>> {
         - UUID id
         - String publicPlace
         - String number
@@ -14,28 +13,30 @@ package SG-MPC {
         - String complement
 
         + getFullAddressText(UUID id): String
+    }
+
+    class AddressService <<control>>{
         + updateAddressInformation(Address address): Boolean
         + addNewAddress(Address address): Boolean
     }
 
-    class Company {
-        + UUID id
-        + String corporateReason
-        + String cnpj
-        + String phone
-        + Address address
+    class Company <<entity>>{
+        - UUID id
+        - String corporateReason
+        - String cnpj
+        - String phone
+        - Address address
 
         + createOrUpdateCompanyProfile(Company company): Boolean
         + getCompanyInfo(UUID id): Company
     }
 
-    class Supplier {
-        + UUID id
-        + String corporateReason
-        + String cnpj
-        + String phone
-        + Address address
-        + Company company
+    class Supplier <<entity>>{
+        - UUID id
+        - String corporateReason
+        - String cnpj
+        - String phone
+        - Address address
 
         + getSupplierInfo(UUID id): Supplier
         + createOrUpdateSupplier(Supplier supplier): UUID
@@ -43,18 +44,16 @@ package SG-MPC {
         + removeSupplier(UUID id): Boolean
     }
 
-    class User {
-        + UUID id
-        + String name
-        + String cpf
-        + String rg
-        + String phone
-        + String email
-        + String password
-        + String profilePictureUrl
-        + boolean isActive
-        + Address address
-        + Company company
+    class User <<entity>>{
+        - UUID id
+        - String name
+        - String cpf
+        - String rg
+        - String phone
+        - String email
+        - String password
+        - String profilePictureUrl
+        - boolean isActive
 
         + getLoggedUser(UUID id): User
         + authenticateUser(String email, Password password): User
@@ -63,11 +62,11 @@ package SG-MPC {
         + changeProfilePicture(UUID id, String url_link): Boolean
     }
 
-    class Product {
-        + UUID id
-        + String name
-        + String measurementUnit
-        + Company company
+    class Product <<entity>>{
+        - UUID id
+        - String name
+        - String measurementUnit
+        - Company company
 
         + getProductInfo(UUID id): Product
         + getManufacturerInfo(UUID id): Company
@@ -75,21 +74,24 @@ package SG-MPC {
         + addNewProduct(Product product): UUID
     }
 
-    class Invoice {
-        + UUID id
-        + String invoiceNumber
-        + String path
-        + Supplier supplier
-        + User registrationUser
-        + Company company
+    class Invoice <<entity>> {
+        - UUID id
+        - String invoiceNumber
+        - String path
+        - Supplier supplier
+        - User registrationUser
+        - Company company
 
         + getInvoiceFullData(UUID id): Invoice
-        + getInvoiceBySupplier(Supplier supplier) : Invoice
-        + importNewInvoice(String xmlFile) : Boolean
+        + getInvoiceBySupplier(Supplier supplier)
+    }
+
+    class InvoiceService <<control>>{
+        + importNewInvoice(String xmlFile)
         + extractSuppliers(Invoice invoice): List<Supplier>
     }
 
-    class ProductMovimentationIn {
+    class ProductMovimentationIn <<entity>>{
         - UUID id
         - BigDecimal quantity
         - DateTime purchaseDate
@@ -98,12 +100,14 @@ package SG-MPC {
         - Supplier supplier
         - User registrationUser
         - Company company
+    }
 
+    class ProductMovimentationService <<control>>{
         + getListOfProductsByDate(DateTime purchaseDate) : List<Product>
         + addNewProductMovimentationIn(Product product, Invoice fromInvoice): Boolean
     }
 
-    class ProductMovimentationOut {
+    class ProductMovimentationOut <<entity>>{
         - UUID id
         - BigDecimal quantity
         - String destination
@@ -117,7 +121,7 @@ package SG-MPC {
         + notifyLowStockQuantity(): void
     }
 
-    class ProductMapHistoryProduct {
+    class ProductMapHistoryProduct <<entity>>{
         - UUID id
         - BigDecimal remainingQuantity
         - BigDecimal purchasedQuantity
@@ -133,7 +137,7 @@ package SG-MPC {
         + deleteProductMap(UUID id): Boolean
     }
 
-    class ProductMapHistory {
+    class ProductMapHistory <<entity>>{
         - UUID id
         - DateTime generatedDate
         - boolean isOriginal
@@ -143,12 +147,10 @@ package SG-MPC {
         + registerAnyModifications(): void
     }
 
-
     Company "1" *-- "1" Address : has
     User "1" *-- "1" Address : has
-    User "1" *-- "1" Company : works-for
+    User "1" *-- "*" Company : works-for
     Supplier "1" *-- "1" Address : has
-    Supplier "1" *-- "1" Company : is-a
     Invoice "1" *-- "1" Supplier : issued-by >
     Invoice "1" *-- "1" User : imported-by >
     ProductMovimentationIn "1..*" *-- "1" Invoice : added-by >
@@ -159,6 +161,6 @@ package SG-MPC {
     ProductMovimentationOut "1..*" o-[hidden]- "1" User : registered-by >
     ProductMapHistoryProduct "1..*" *-- "*" ProductMapHistory : part-of >
     ProductMapHistoryProduct "1..*" *-- "*" Product : has-many >
-}
 
+}
 @enduml
