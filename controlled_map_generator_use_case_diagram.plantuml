@@ -1,0 +1,60 @@
+@startuml controlled_map_generator_use_case_diagram
+left to right direction
+skinparam packageStyle rect
+skinparam actorStyle hollow
+
+actor Diretor <<humano>>
+actor Operador <<humano>>
+actor API <<sistema>>
+
+Diretor <|-left- Operador
+
+package "Sistema gerenciador de mapas\nde produtos controlados" {
+    usecase "Cria modelo\nde mapa" as UC1
+    usecase "Edita\nmodelo" as UC2
+    usecase "Apaga\nmodelo" as UC3
+    usecase "Seleciona um\nmodelo de mapa" as UC4
+    usecase "Efetua\ndownload" as UC5
+    usecase "Armazena dados\nde notas fiscais" as UC7
+    usecase "Atualiza valores\nde estoque" as UC8
+    usecase "Extrai\nfornecedores" as UC9
+    usecase "Importa\nXML NFe" as UC10
+    usecase "Registra consumo\nde produtos" as UC11
+    usecase "Edita\nfornecedor" as UC12
+    usecase "Apaga\nfornecedor" as UC13
+    usecase "Seleciona\nfornecedor" as UC14
+    usecase "Adiciona\nfornecedor" as UC15
+    usecase "Autentica\nna aplicação" as UC16
+    usecase "Alerta quantidade\nde produtos\nem estoque" as UC17
+}
+
+Diretor --> UC1
+Diretor --> UC4
+Diretor --> UC10
+
+UC4 <|-- UC2 : <<extends>>
+UC4 <|-- UC3 : <<extends>>
+UC4 <|-- UC5 : <<extends>>
+
+UC1 --> UC2 : <<include>>
+
+UC10 --> UC7 : <<include>>
+UC10 --> UC8 : <<include>>
+UC10 --> UC9 : <<include>>
+
+Operador --> UC11
+Operador --> UC14
+Operador --> UC15
+Operador --> UC16
+
+UC11 --> UC17 : <<include>>
+
+UC14 <|-- UC12 : <<extends>>
+UC14 <|-- UC13 : <<extends>>
+
+API -up-> UC7
+API -up-> UC8
+API -up-> UC9
+API -up-> UC17
+
+@enduml
