@@ -1,0 +1,139 @@
+@startuml
+skinparam linetype polyline
+
+entity addresses {
+  + id: uuid
+  --
+  public_place: varchar(255)
+  number: varchar(11)
+  neighborhood: varchar(255)
+  city: varchar(255)
+  state: bpchar(2)
+  cep: bpchar(8)
+  complement: varchar(255)
+}
+
+entity companies {
+  + id: uuid
+  --
+  corporate_reason: varchar(255)
+  cnpj: bpchar(14)
+  phone: varchar(10)
+  address_id: uuid
+}
+
+entity product_maps_history {
+  + id: uuid
+  --
+  generated_date: date
+  is_original: bool
+  company_id: uuid
+}
+
+entity products {
+  + id: uuid
+  --
+  name: varchar(255)
+  measurement_unit: bpchar(2)
+  company_id: uuid
+}
+
+entity suppliers {
+  + id: uuid
+  --
+  corporate_reason: varchar(255)
+  cnpj: bpchar(14)
+  phone: varchar(10)
+  address_id: uuid
+  company_id: uuid
+}
+
+entity users {
+  + id: uuid
+  --
+  name: varchar(255)
+  cpf: bpchar(11)
+  rg: bpchar(9)
+  phone: varchar(11)
+  email: varchar(255)
+  password: varchar(255)
+  is_active: bool
+  address_id: uuid
+  company_id: uuid
+}
+
+entity access_log {
+  + id: uuid
+  --
+  log_date: timestamp
+  user_id: uuid
+}
+
+entity invoices {
+  + id: uuid
+  --
+  invoice_number: varchar(255)
+  path: varchar(255)
+  supplier_id: uuid
+  registration_user_id: uuid
+  company_id: uuid
+}
+
+entity product_maps_history_products {
+  + id: uuid
+  --
+  remaining_quantity: numeric(12,6)
+  purchased_quantity: numeric(12,6)
+  total_consumed: numeric(12,6)
+  total_lost: numeric(12,6)
+  final_quantity: numeric(12,6)
+  product_map_history_id: uuid
+  product_id: uuid
+}
+
+entity product_movimentations_in {
+  + id: uuid
+  --
+  quantity: numeric(12,6)
+  purchase_date: date
+  invoice_id: uuid
+  product_id: uuid
+  supplier_id: uuid
+  registration_user_id: uuid
+  company_id: uuid
+}
+
+entity product_movimentations_out {
+  + id: uuid
+  --
+  quantity: numeric(12,6)
+  destination: bpchar(2)
+  consumption_date: timestamp
+  product_id: uuid
+  registration_user_id: uuid
+  company_id: uuid
+}
+
+companies }|--|| addresses : "address_id"
+product_maps_history }|--|| companies : "company_id"
+products }|--|| companies : "company_id"
+suppliers }|--|| addresses : "address_id"
+suppliers }|--|| companies : "company_id"
+users }|--|| addresses : "address_id"
+users }|--|| companies : "company_id"
+access_log }|--|| users : "user_id"
+invoices }|--|| suppliers : "supplier_id"
+invoices }|--|| users : "registration_user_id"
+invoices }|--|| companies : "company_id"
+product_maps_history_products }|--|| products : "product_id"
+product_maps_history_products }|--|| product_maps_history : "product_map_history_id"
+product_movimentations_in }|--|| invoices : "invoice_id"
+product_movimentations_in }|--|| products : "product_id"
+product_movimentations_in }|--|| suppliers : "supplier_id"
+product_movimentations_in }|--|| users : "registration_user_id"
+product_movimentations_in }|--|| companies : "company_id"
+product_movimentations_out }|--|| products : "product_id"
+product_movimentations_out }|--|| users : "registration_user_id"
+product_movimentations_out }|--|| companies : "company_id"
+
+@enduml
