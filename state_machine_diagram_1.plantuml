@@ -1,0 +1,25 @@
+@startuml
+skinparam linetype ortho
+[*] --> Validacao
+
+Validacao : Ação: verificar a integridade do XML
+Validacao --> Processamento : sucesso
+Validacao --> Erro : registra erro
+
+Processamento --> Importacao : processando
+
+state Importacao {
+    EmImportacao : Ação: extrair fornecedores
+    EmImportacao : Ação: extrair produtos
+    EmImportacao : Ação: atualizar quantidade de produtos existentes
+    EmImportacao --> Importado : sucesso
+    
+}
+
+Processamento -right-> Erro : registra erro
+
+Importado --> Completo
+Erro --> [*]
+Completo --> [*]
+
+@enduml

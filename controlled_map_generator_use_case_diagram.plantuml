@@ -2,6 +2,7 @@
 left to right direction
 skinparam packageStyle rect
 skinparam actorStyle hollow
+skinparam linetype polyline
 
 actor Diretor <<humano>>
 actor Operador <<humano>>
@@ -10,22 +11,22 @@ actor API <<sistema>>
 Diretor <|-left- Operador
 
 package "Sistema gerenciador de mapas\nde produtos controlados" {
-    usecase "Cria modelo\nde mapa" as UC1
-    usecase "Edita\nmodelo" as UC2
-    usecase "Apaga\nmodelo" as UC3
-    usecase "Seleciona um\nmodelo de mapa" as UC4
-    usecase "Efetua\ndownload" as UC5
-    usecase "Armazena dados\nde notas fiscais" as UC7
-    usecase "Atualiza valores\nde estoque" as UC8
-    usecase "Extrai\nfornecedores" as UC9
-    usecase "Importa\nXML NFe" as UC10
-    usecase "Registra consumo\nde produtos" as UC11
-    usecase "Edita\nfornecedor" as UC12
-    usecase "Apaga\nfornecedor" as UC13
-    usecase "Seleciona\nfornecedor" as UC14
-    usecase "Adiciona\nfornecedor" as UC15
-    usecase "Autentica\nna aplicação" as UC16
-    usecase "Alerta quantidade\nde produtos\nem estoque" as UC17
+    usecase "Criar modelo\nde mapa" as UC1
+    usecase "Editar\nmodelo" as UC2
+    usecase "Apagar\nmodelo" as UC3
+    usecase "Selecionar\nmodelo de mapa" as UC4
+    usecase "Efetuar\ndownload" as UC5
+    usecase "Armazenar dados\nde notas fiscais" as UC7
+    usecase "Atualizar valores\nde estoque" as UC8
+    usecase "Extrair\nfornecedores" as UC9
+    usecase "Importar\nXML NFe" as UC10
+    usecase "Registrar consumo\nde produtos" as UC11
+    usecase "Editar\nfornecedor" as UC12
+    usecase "Apagar\nfornecedor" as UC13
+    usecase "Selecionar\nfornecedor" as UC14
+    usecase "Adicionar\nfornecedor" as UC15
+    usecase "Autenticar\nna aplicação" as UC16
+    usecase "Alertar quantidade\nde produtos\nem estoque" as UC17
 }
 
 Diretor --> UC1

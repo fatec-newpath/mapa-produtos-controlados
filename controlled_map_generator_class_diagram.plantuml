@@ -1,7 +1,8 @@
 @startuml controlled_map_generator_class_diagram
 skinparam linetype ortho
 
-package Sistema-Gerenciador-Mapa-Produtos-Controlados {
+package SistemaGerenciadorMapaProdutosControlados {
+
     class Address <<entity>> {
         - UUID id
         - String publicPlace
@@ -11,13 +12,6 @@ package Sistema-Gerenciador-Mapa-Produtos-Controlados {
         - String state
         - String cep
         - String complement
-
-        + getFullAddressText(UUID id): String
-    }
-
-    class AddressService <<control>>{
-        + updateAddressInformation(Address address): Boolean
-        + addNewAddress(Address address): Boolean
     }
 
     class Company <<entity>>{
@@ -26,9 +20,6 @@ package Sistema-Gerenciador-Mapa-Produtos-Controlados {
         - String cnpj
         - String phone
         - Address address
-
-        + createOrUpdateCompanyProfile(Company company): Boolean
-        + getCompanyInfo(UUID id): Company
     }
 
     class Supplier <<entity>>{
@@ -37,11 +28,6 @@ package Sistema-Gerenciador-Mapa-Produtos-Controlados {
         - String cnpj
         - String phone
         - Address address
-
-        + getSupplierInfo(UUID id): Supplier
-        + createOrUpdateSupplier(Supplier supplier): UUID
-        + bulkCreateSuppliersIfNotExists(List<Supplier> Suppliers): Boolean
-        + removeSupplier(UUID id): Boolean
     }
 
     class User <<entity>>{
@@ -54,12 +40,8 @@ package Sistema-Gerenciador-Mapa-Produtos-Controlados {
         - String password
         - String profilePictureUrl
         - boolean isActive
-
-        + getLoggedUser(UUID id): User
-        + authenticateUser(String email, Password password): User
-        + updateUserProfile(User user): Boolean
-        + resetPassword(UUID id, String newPassword): Boolean
-        + changeProfilePicture(UUID id, String url_link): Boolean
+        - Address address
+        - List<Company> companies
     }
 
     class Product <<entity>>{
@@ -67,11 +49,6 @@ package Sistema-Gerenciador-Mapa-Produtos-Controlados {
         - String name
         - String measurementUnit
         - Company company
-
-        + getProductInfo(UUID id): Product
-        + getManufacturerInfo(UUID id): Company
-        + changeMeasurementUnit(UUID id, String newMeasurementUnit): Boolean
-        + addNewProduct(Product product): UUID
     }
 
     class Invoice <<entity>> {
@@ -81,14 +58,6 @@ package Sistema-Gerenciador-Mapa-Produtos-Controlados {
         - Supplier supplier
         - User registrationUser
         - Company company
-
-        + getInvoiceFullData(UUID id): Invoice
-        + getInvoiceBySupplier(Supplier supplier)
-    }
-
-    class InvoiceService <<control>>{
-        + importNewInvoice(String xmlFile)
-        + extractSuppliers(Invoice invoice): List<Supplier>
     }
 
     class ProductMovimentationIn <<entity>>{
@@ -102,11 +71,6 @@ package Sistema-Gerenciador-Mapa-Produtos-Controlados {
         - Company company
     }
 
-    class ProductMovimentationService <<control>>{
-        + getListOfProductsByDate(DateTime purchaseDate) : List<Product>
-        + addNewProductMovimentationIn(Product product, Invoice fromInvoice): Boolean
-    }
-
     class ProductMovimentationOut <<entity>>{
         - UUID id
         - BigDecimal quantity
@@ -115,10 +79,6 @@ package Sistema-Gerenciador-Mapa-Produtos-Controlados {
         - Product product
         - User registrationUser
         - Company company
-
-        + addNewProductConsumption(ProductMovimentationOut prodMovOut): String
-        + sumAllComsumptionsByDate(DateTime consumptionDate): Float
-        + notifyLowStockQuantity(): void
     }
 
     class ProductMapHistoryProduct <<entity>>{
@@ -130,11 +90,6 @@ package Sistema-Gerenciador-Mapa-Produtos-Controlados {
         - BigDecimal finalQuantity
         - ProductMapHistory productMapHistory
         - Product product
-
-        + getAllProductsFromMap(ProductMapHistory mapId): List<Products>
-        + createOrUpdateProductMap(ProductMapHistory productMap) : Boolean
-        + downloadMap(UUID id): Byte[]
-        + deleteProductMap(UUID id): Boolean
     }
 
     class ProductMapHistory <<entity>>{
@@ -142,25 +97,79 @@ package Sistema-Gerenciador-Mapa-Produtos-Controlados {
         - DateTime generatedDate
         - boolean isOriginal
         - Company company
+    }
 
+    class AddressManager <<control>>{
+        + getFullAddressText(UUID id): String
+        + updateAddressInformation(Address address): Boolean
+        + addNewAddress(Address address): Boolean
+    }
+
+    class CompanyManager <<control>>{
+        + createOrUpdateCompanyProfile(Company company): Boolean
+        + getCompanyInfo(UUID id): Company
+    }
+
+    class SupplierManager <<control>>{
+        + getSupplierInfo(UUID id): Supplier
+        + saveSupplier(Supplier supplier): UUID
+        + bulkCreateSuppliersIfNotExists(List<Supplier> suppliers): Boolean
+        + deleteSupplier(UUID id): Boolean
+    }
+
+    class UserManager <<control>>{
+        + getLoggedUser(UUID id): User
+        + authenticateUser(String email, String password): User
+        + updateUserProfile(User user): Boolean
+        + resetPassword(UUID id, String newPassword): Boolean
+        + changeProfilePicture(UUID id, String urlLink): Boolean
+    }
+
+    class ProductManager <<control>>{
+        + getProductInfo(UUID id): Product
+        + getManufacturerInfo(UUID id): Company
+        + changeMeasurementUnit(UUID id, String newMeasurementUnit): Boolean
+        + saveProduct(Product product): UUID
+    }
+
+    class InvoiceManager <<control>>{
+        + getInvoiceFullData(UUID id): Invoice
+        + getInvoiceBySupplier(Supplier supplier): List<Invoice>
+        + importNewInvoice(String xmlFile): UUID
+        + extractSuppliers(Invoice invoice): List<Supplier>
+    }
+
+    class ProductMovimentationManager <<control>>{
+        + getListOfProductsByDate(DateTime purchaseDate): List<Product>
+        + addNewProductMovimentationIn(ProductMovimentationIn movimentation): Boolean
+        + addNewProductConsumption(ProductMovimentationOut movimentation): String
+        + sumAllConsumptionsByDate(DateTime consumptionDate): Float
+        + notifyLowStockQuantity(): void
+    }
+
+    class ProductMapHistoryManager <<control>>{
+        + getAllProductsFromMap(ProductMapHistory map): List<ProductMapHistoryProduct>
+        + saveProductMapHistory(ProductMapHistory productMap): Boolean
+        + downloadMap(UUID id): Byte[]
+        + deleteProductMap(UUID id): Boolean
         + getAllMapsGeneratedByCompany(Company company): List<ProductMapHistory>
         + registerAnyModifications(): void
     }
 
     Company "1" *-- "1" Address : has
-    User "1" *-- "1" Address : has
+    User "1" *-- "1" Address : lives-at
     User "1" *-- "*" Company : works-for
-    Supplier "1" *-- "1" Address : has
+    Supplier "1" *-- "1" Address : located-at
     Invoice "1" *-- "1" Supplier : issued-by >
     Invoice "1" *-- "1" User : imported-by >
-    ProductMovimentationIn "1..*" *-- "1" Invoice : added-by >
+    ProductMovimentationIn "1..*" *-- "1" Invoice : part-of >
     ProductMovimentationIn "1..*" *-- "1" Product : contains >
     ProductMovimentationIn "1" *-- "1" Supplier : from >
-    ProductMovimentationIn "1..*" o-[hidden]- "1" User : registered-by >
-    ProductMovimentationOut "1..*" *-- "*" Product : contains >
-    ProductMovimentationOut "1..*" o-[hidden]- "1" User : registered-by >
-    ProductMapHistoryProduct "1..*" *-- "*" ProductMapHistory : part-of >
-    ProductMapHistoryProduct "1..*" *-- "*" Product : has-many >
-
+    ProductMovimentationIn "1..*" *-- "1" User : registered-by >
+    ProductMovimentationOut "1..*" *-- "1" Product : contains >
+    ProductMovimentationOut "1..*" *-- "1" User : registered-by >
+    ProductMapHistoryProduct "1..*" *-- "1" ProductMapHistory : part-of >
+    ProductMapHistoryProduct "1..*" *-- "1" Product : includes >
+    Product "1" *-- "1" Company : produced-by
 }
 @enduml

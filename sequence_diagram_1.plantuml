@@ -1,0 +1,36 @@
+@startuml
+actor Operador
+
+participant "UserManager" as UM
+participant "InvoiceManager" as IM
+participant "ProductMovimentationManager" as PMM
+participant "ProductMapHistoryManager" as PMHM
+
+Operador -> UM : authenticateUser(email, password)
+UM --> Operador : User (authenticated)
+
+Operador -> IM : importNewInvoice(xmlFile)
+IM -> IM : parse xml and create Invoice
+IM -> IM : extract Suppliers
+IM -> IM : save Invoice
+IM --> Operador : Invoice imported
+
+Operador -> PMM : addNewProductMovimentationIn(product, invoice)
+PMM -> PMM : updateStock(product, quantity)
+PMM --> Operador : ProductMovimentationIn registered
+
+Operador -> PMM : addNewProductConsumption(productMovimentationOut)
+PMM -> PMM : updateStock(product, quantity)
+PMM -> PMM : notifyLowStockQuantity()
+PMM --> Operador : ProductMovimentationOut registered
+
+Operador -> PMHM : createOrUpdateProductMap(productMapHistory)
+PMHM -> PMHM : registerMap(productMapHistory)
+PMHM -> PMHM : logModifications(productMapHistory)
+PMHM --> Operador : ProductMapHistory created/updated
+
+Operador -> PMHM : downloadMap(productMapHistoryId)
+PMHM -> PMHM : generateMapFile(productMapHistoryId)
+PMHM --> Operador : map file (Byte[])
+
+@enduml
