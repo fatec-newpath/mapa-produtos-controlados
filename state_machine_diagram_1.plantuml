@@ -1,25 +1,27 @@
 @startuml
 skinparam linetype ortho
-[*] --> Validacao
 
-Validacao : Ação: verificar a integridade do XML
-Validacao --> Processamento : sucesso
-Validacao --> Erro : registra erro
+package SistemaGerenciadorMapaProdutosControlados {
+    [*] --> Validacao
 
-Processamento --> Importacao : processando
+    Validacao : Ação: verificar a integridade do XML
+    Validacao --> Processamento : sucesso
+    Validacao --> Erro : registra erro
 
-state Importacao {
-    EmImportacao : Ação: extrair fornecedores
-    EmImportacao : Ação: extrair produtos
-    EmImportacao : Ação: atualizar quantidade de produtos existentes
-    EmImportacao --> Importado : sucesso
-    
+    Processamento --> Importacao : processando
+
+    state Importacao {
+        EmImportacao : Ação: extrair fornecedores
+        EmImportacao : Ação: extrair produtos
+        EmImportacao : Ação: atualizar quantidade de produtos existentes
+        EmImportacao --> Importado : sucesso
+
+    }
+
+    Processamento -right-> Erro : registra erro
+
+    Importado --> Completo
+    Erro --> [*]
+    Completo --> [*]
 }
-
-Processamento -right-> Erro : registra erro
-
-Importado --> Completo
-Erro --> [*]
-Completo --> [*]
-
 @enduml
