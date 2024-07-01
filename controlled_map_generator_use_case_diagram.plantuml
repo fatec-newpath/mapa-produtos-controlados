@@ -33,25 +33,25 @@ Diretor --> UC1
 Diretor --> UC4
 Diretor --> UC10
 
-UC4 <|-- UC2 : <<extends>>
-UC4 <|-- UC3 : <<extends>>
-UC4 <|-- UC5 : <<extends>>
+UC4 <|.. UC2 : <<extends>>
+UC4 <|.. UC3 : <<extends>>
+UC4 <|.. UC5 : <<extends>>
 
-UC1 --> UC2 : <<include>>
+UC1 ..> UC2 : <<include>>
 
-UC10 --> UC7 : <<include>>
-UC10 --> UC8 : <<include>>
-UC10 --> UC9 : <<include>>
+UC10 ..> UC7 : <<include>>
+UC10 ..> UC8 : <<include>>
+UC10 ..> UC9 : <<include>>
 
 Operador --> UC11
 Operador --> UC14
 Operador --> UC15
 Operador --> UC16
 
-UC11 --> UC17 : <<include>>
+UC11 ..> UC17 : <<include>>
 
-UC14 <|-- UC12 : <<extends>>
-UC14 <|-- UC13 : <<extends>>
+UC14 <|.. UC12 : <<extends>>
+UC14 <|.. UC13 : <<extends>>
 
 API -up-> UC7
 API -up-> UC8
